@@ -1,9 +1,11 @@
-function Movie({title, url, year}) {
+function Movie({id, title, url, year,onSelect}) {
   return (
-    <li className="movie">
+    <li onClick={()=>onSelect(id)}>
         <img src={url} alt={`${title}--poster`} />
-        <h3>{title}</h3>
-        <p>{year}</p>
+        <h3>{title}</h3>        
+        <div>
+          <p>{year}</p>
+        </div>
     </li>
   )
 }

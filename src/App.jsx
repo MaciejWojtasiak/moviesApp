@@ -4,7 +4,10 @@ import Search from './components/Search/Search';
 import NumResults from './components/NumResults/NumResults';
 import Main from './components/Main/Main';
 import MoviesList from './components/MoviesList/MoviesList';
+import WatchedSummary from './components/WatchedSummary/WatchedSummary';
+import Box from './components/Box/Box';
 import WatchedBox from './WatchedBox';
+import Selected from './components/Selected/Selected';
 import { useState } from 'react';
 
 const tempMovieData = [
@@ -12,6 +15,8 @@ const tempMovieData = [
     imdbID: "tt1375666",
     Title: "Inception",
     Year: "2010",
+    runtime: 148,
+    imdbRating: 8.8,
     Poster:
       "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
   },
@@ -19,6 +24,8 @@ const tempMovieData = [
     imdbID: "tt0133093",
     Title: "The Matrix",
     Year: "1999",
+    runtime: 148,
+    imdbRating: 8.8,
     Poster:
       "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
   },
@@ -26,6 +33,8 @@ const tempMovieData = [
     imdbID: "tt6751668",
     Title: "Parasite",
     Year: "2019",
+    runtime: 148,
+    imdbRating: 8.8,
     Poster:
       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
@@ -58,6 +67,17 @@ const tempWatchedData = [
 function App() { 
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [selected, setSelected] = useState(false);
+
+  const onDeleteWatched = (id) => {
+    setWatched(watched.filter((item)=> item.imdbID != id))
+  }
+  const onSelect = (id) => {
+    setSelected(movies.filter(item => item.imdbID === id)[0]);
+  }
+  const onBack = () => {
+    setSelected(false);
+  }
 
   return (
     <>
@@ -66,8 +86,22 @@ function App() {
       <NumResults movies={movies}/>
      </Navbar> 
      <Main>
-      <MoviesList movies={movies}/>
-      <WatchedBox />
+      <Box>
+        <MoviesList movies={movies} onSelect={onSelect}/>
+      </Box>    
+      <Box>
+        {selected ?
+          (
+            <Selected selected={selected} onBack={onBack}/>
+          )
+          :
+          (        
+            <>
+            <WatchedSummary watched={watched}/>
+            <WatchedBox watched={watched} onDeleteWatched={onDeleteWatched}/>
+            </>          
+          )}        
+      </Box>
      </Main>
     </>
   )
