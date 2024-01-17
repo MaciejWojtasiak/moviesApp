@@ -330,7 +330,9 @@ body {
   flex-direction: column;
   gap: 2.4rem;
 }
-
+.rating span {
+  cursor: pointer;
+}
 .btn-add {
   background-color: var(--color-primary);
   color: var(--color-text);

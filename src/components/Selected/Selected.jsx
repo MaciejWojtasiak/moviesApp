@@ -1,5 +1,6 @@
+import StarRating from "../StarRating/StarRating"
+
 function Selected({selected, onBack}) {
-    console.log(selected)
   return (
     <div className="details">
         <header>
@@ -12,7 +13,7 @@ function Selected({selected, onBack}) {
             </div>
         </header>
         <section>
-
+        <StarRating />
         </section>
     </div>
   )
