@@ -3,9 +3,9 @@ const starStyle = {
     height:'24px'
 }
 
-function Star({onRate, full}) {
+function Star({onRate, full, onHoverIn, onHoverOut}) {
   return (
-    <span onClick={onRate} onMouseEnter={onRate}>
+    <span onClick={onRate} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut}>
         {full ? (
         <svg style={starStyle}
             xmlns="http://www.w3.org/2000/svg" 
@@ -28,8 +28,7 @@ function Star({onRate, full}) {
                 strokeWidth="1">
             </path>
         </svg>
-        )}
-        
+        )}        
     </span>
   )
 }

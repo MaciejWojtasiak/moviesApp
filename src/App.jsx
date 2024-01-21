@@ -79,6 +79,7 @@ function App() {
     setSelected(false);
   }
 
+
   return (
     <>
      <Navbar>
@@ -92,7 +93,7 @@ function App() {
       <Box>
         {selected ?
           (
-            <Selected selected={selected} onBack={onBack}/>
+            <Selected key={selected.imdbID} selected={selected} onBack={onBack}/>
           )
           :
           (        
