@@ -8,7 +8,8 @@ import WatchedSummary from './components/WatchedSummary/WatchedSummary';
 import Box from './components/Box/Box';
 import WatchedBox from './WatchedBox';
 import Selected from './components/Selected/Selected';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const tempMovieData = [
   {
@@ -63,11 +64,19 @@ const tempWatchedData = [
   },
 ];
 
+const KEY = '5350fbdf'
+
 
 function App() { 
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [selected, setSelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [query,setQuery] = useState('Hello');
+
+  const onChangeQuery = (e) => {
+    setQuery(e)
+  }
 
   const onDeleteWatched = (id) => {
     setWatched(watched.filter((item)=> item.imdbID != id))
@@ -79,16 +88,32 @@ function App() {
     setSelected(false);
   }
 
+  useEffect(()=>{
+    const getData = async () =>{
+      setIsLoading(true);
+      try {        
+        const response = await axios.get(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
+        if(response.data.Response === 'False') throw new Error('Movie not found.');
+        setMovies(response.data.Search);       
+      } catch(err) {
+        console.error(err);
+      }  finally {
+        setIsLoading(false);
+      }
+    }
+    getData();        
+  },[])
+
 
   return (
     <>
      <Navbar>
-      <Search />
+      <Search onChangeQuery={onChangeQuery} query={query}/>
       <NumResults movies={movies}/>
      </Navbar> 
      <Main>
       <Box>
-        <MoviesList movies={movies} onSelect={onSelect}/>
+        {isLoading  ? 'Loading...' : <MoviesList movies={movies} onSelect={onSelect}/> }        
       </Box>    
       <Box>
         {selected ?

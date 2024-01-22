@@ -24,7 +24,7 @@ function StarRating() {
     const handleRating = (rating) => {
         setRating(rating);
     }
-    
+     
   return (
     <div className="rating">
         <div style={containerStyle}>
