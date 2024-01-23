@@ -52,7 +52,13 @@ function App() {
       return
     }
     getData();        
-  },[query])
+  },[query]);
+
+  const handleOnAdd = (watchedMovie) => {
+    const isInWatched = watched.filter(movie => movie.imdbID === watchedMovie.imdbID).length > 0;
+    if(!isInWatched) setWatched((prevState)=>[...prevState,watchedMovie]);
+    onBack();
+  }
 
 
   return (
@@ -68,7 +74,7 @@ function App() {
       <Box>
         {selected ?
           (
-            <Selected key={selected.imdbID} selectedID={selected.imdbID} onBack={onBack}/>
+            <Selected key={selected.imdbID} selectedID={selected.imdbID} onBack={onBack} onAdd={handleOnAdd}/>
           )
           :
           (        

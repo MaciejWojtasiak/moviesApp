@@ -4,10 +4,10 @@ import StarRating from "../StarRating/StarRating";
 
 const KEY = import.meta.env.VITE_KEY;
 
-function Selected({selectedID, onBack}) {
+function Selected({selectedID, onBack, onAdd}) {
   const [isLoading, setIsLoading] = useState(false);
   const [detailedSelected, setDeatailedSelected] = useState({});
-  console.log(detailedSelected)
+
   useEffect(()=>{
     setIsLoading(true);
     const getSelected = async () => {
@@ -23,6 +23,13 @@ function Selected({selectedID, onBack}) {
     getSelected();
   },[selectedID]);
 
+  const handleAddSelected = (userRating) =>{    
+    const watchedMovie = {
+      ...detailedSelected,userRating
+    }
+    onAdd(watchedMovie);
+  }
+
   return (
   <>
     {isLoading ? 'Loading...': (
@@ -32,13 +39,13 @@ function Selected({selectedID, onBack}) {
             <img src={detailedSelected.Poster} alt={`Poster of ${detailedSelected.Title}`}/>
             <div className="details-overview">
                 <h2>{detailedSelected.Title}</h2>
-                <p>{detailedSelected.Year} - {detailedSelected.runtime} min</p>
+                <p>{detailedSelected.Year} - {detailedSelected.Runtime}</p>
                 <p>{detailedSelected.Genre}</p>
                 <p>{detailedSelected.imdbRating} IMDb rating</p>
             </div>
         </header>
         <section>
-        <StarRating />
+        <StarRating handleAddSelected={handleAddSelected}/>
         <p><em>{detailedSelected.Plot}</em></p>
         <p>Starring {detailedSelected.Actors}</p>
         <p>Directed by {detailedSelected.Director}</p>

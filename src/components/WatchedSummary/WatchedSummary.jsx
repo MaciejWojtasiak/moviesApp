@@ -1,9 +1,9 @@
 function WatchedSummary({watched}) {
-    const average = (arr) => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+    const average = (arr) => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0).toFixed(1);
 
     const imdbAvg = average(watched.map((movie)=>movie.imdbRating));
     const userAvg = average(watched.map((movie)=>movie.userRating));
-    const avgTime = average(watched.map((movie)=>movie.runtime));    
+    const avgTime = average(watched.map((movie)=>movie.Runtime.replace('min','')));    
 
   return (
     <div className="summary">

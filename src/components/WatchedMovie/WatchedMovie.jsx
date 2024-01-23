@@ -2,7 +2,7 @@ function WatchedMovie({movie, onDeleteWatched}) {
   return (
     <li>
       <img src={movie.Poster} alt={`${movie.title} poster`} />
-      <h3>{movie.title}</h3>
+      <h3>{movie.Title}</h3>
       <div>
         <p>
           <span>⭐️</span>
@@ -14,7 +14,7 @@ function WatchedMovie({movie, onDeleteWatched}) {
         </p>
         <p>
           <span>⏳</span>
-          <span>{movie.runtime} min</span>
+          <span>{movie.Runtime}</span>
         </p>
 
         <button

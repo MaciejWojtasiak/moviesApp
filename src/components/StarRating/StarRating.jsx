@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Star from "../../Star";
 
 const containerStyle = {
@@ -17,7 +17,7 @@ const textStyle = {
     margin:'0'
 }
 
-function StarRating() {  
+function StarRating({handleAddSelected}) {  
     const [rating, setRating] = useState(0);
     const [tempRating, setTempRating] = useState(0);  
     const [isRated, setIsRated] = useState(false);  
@@ -43,7 +43,7 @@ function StarRating() {
             </div>  
             <p style={textStyle}>{tempRating || ''}</p>         
         </div>        
-        {isRated && <button className="btn-add">+ Add to list</button>}        
+        {isRated && <button className="btn-add" onClick={()=>handleAddSelected(rating)}>+ Add to list</button>}        
     </div>
   )
 }
