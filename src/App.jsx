@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import Search from './components/Search/Search';
@@ -8,8 +10,7 @@ import WatchedSummary from './components/WatchedSummary/WatchedSummary';
 import Box from './components/Box/Box';
 import WatchedBox from './WatchedBox';
 import Selected from './components/Selected/Selected';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import Loader from './components/Loader/Loader';
 
 const KEY = import.meta.env.VITE_KEY;
 
@@ -28,7 +29,9 @@ function App() {
     setWatched(watched.filter((item)=> item.imdbID != id))
   }
   const onSelect = (id) => {
-    setSelected(movies.filter(item => item.imdbID === id)[0]);
+    const isInWatched = watched.filter(movie => movie.imdbID === id).length > 0;
+    isInWatched ? setSelected(watched.filter(item => item.imdbID === id)[0]) : 
+                  setSelected(movies.filter(item => item.imdbID === id)[0]);
   }
   const onBack = () => {
     setSelected(false);
@@ -69,12 +72,12 @@ function App() {
      </Navbar> 
      <Main>
       <Box>
-        {isLoading  ? 'Loading...' : <MoviesList movies={movies} onSelect={onSelect}/> }        
+        {isLoading  ? <Loader /> : <MoviesList movies={movies} onSelect={onSelect}/> }        
       </Box>    
       <Box>
         {selected ?
           (
-            <Selected key={selected.imdbID} selectedID={selected.imdbID} onBack={onBack} onAdd={handleOnAdd}/>
+            <Selected key={selected.imdbID} selected={selected} onBack={onBack} onAdd={handleOnAdd}/>
           )
           :
           (        

@@ -1,7 +1,8 @@
+import NoImage from "../../NoImage";
 function WatchedMovie({movie, onDeleteWatched}) {
   return (
     <li>
-      <img src={movie.Poster} alt={`${movie.title} poster`} />
+      {movie.Poster === 'N/A' ? <NoImage /> : <img src={movie.Poster} alt={`${movie.Title}--poster`} />} 
       <h3>{movie.Title}</h3>
       <div>
         <p>
