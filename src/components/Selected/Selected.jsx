@@ -1,22 +1,52 @@
-import StarRating from "../StarRating/StarRating"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import StarRating from "../StarRating/StarRating";
 
-function Selected({selected, onBack}) {
+const KEY = import.meta.env.VITE_KEY;
+
+function Selected({selectedID, onBack}) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [detailedSelected, setDeatailedSelected] = useState({});
+  console.log(detailedSelected)
+  useEffect(()=>{
+    setIsLoading(true);
+    const getSelected = async () => {
+        try {
+          const res = await axios.get(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}`);
+          setDeatailedSelected(res.data)
+        } catch(err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
+    }
+    getSelected();
+  },[selectedID]);
+
   return (
-    <div className="details">
+  <>
+    {isLoading ? 'Loading...': (
+      <div className="details">
         <header>
             <button className="btn-back" onClick={onBack}>{`<`}</button>
-            <img src={selected.Poster} alt={`Poster of ${selected.Title}`}/>
+            <img src={detailedSelected.Poster} alt={`Poster of ${detailedSelected.Title}`}/>
             <div className="details-overview">
-                <h2>{selected.Title}</h2>
-                <p>{selected.Year} - {selected.runtime} min</p>
-                <p>{selected.imdbRating} IMDb rating</p>
+                <h2>{detailedSelected.Title}</h2>
+                <p>{detailedSelected.Year} - {detailedSelected.runtime} min</p>
+                <p>{detailedSelected.Genre}</p>
+                <p>{detailedSelected.imdbRating} IMDb rating</p>
             </div>
         </header>
         <section>
         <StarRating />
+        <p><em>{detailedSelected.Plot}</em></p>
+        <p>Starring {detailedSelected.Actors}</p>
+        <p>Directed by {detailedSelected.Director}</p>
         </section>
-    </div>
+      </div>
+    )}   
+  </>
   )
 }
 
-export default Selected
+export default Selected;

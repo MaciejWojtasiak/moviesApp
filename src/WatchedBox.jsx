@@ -1,7 +1,7 @@
 import WatchedMovie from "./components/WatchedMovie/WatchedMovie";
 
 function WatchedBox({watched, onDeleteWatched}) {  
-  
+ 
     return (  
       <div>        
         <ul className="list">

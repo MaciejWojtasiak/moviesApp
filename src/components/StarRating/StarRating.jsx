@@ -19,17 +19,19 @@ const textStyle = {
 
 function StarRating() {  
     const [rating, setRating] = useState(0);
-    const [tempRating, setTempRating] = useState(0);    
+    const [tempRating, setTempRating] = useState(0);  
+    const [isRated, setIsRated] = useState(false);  
 
     const handleRating = (rating) => {
         setRating(rating);
+        setIsRated(true);
     }
      
   return (
     <div className="rating">
         <div style={containerStyle}>
             <div style={starContainerStyle}>
-                {Array.from({length:5}, (_,i)=>(
+                {Array.from({length:10}, (_,i)=>(
                     <Star 
                         key={i} 
                         full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
@@ -41,6 +43,7 @@ function StarRating() {
             </div>  
             <p style={textStyle}>{tempRating || ''}</p>         
         </div>        
+        {isRated && <button className="btn-add">+ Add to list</button>}        
     </div>
   )
 }
