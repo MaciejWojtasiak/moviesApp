@@ -11,13 +11,15 @@ import Box from './components/Box/Box';
 import WatchedBox from './WatchedBox';
 import Selected from './components/Selected/Selected';
 import Loader from './components/Loader/Loader';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const KEY = import.meta.env.VITE_KEY;
 
 
 function App() { 
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(JSON.parse(localStorage.getItem('watched')) || []);
   const [selected, setSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [query,setQuery] = useState('');
@@ -26,16 +28,18 @@ function App() {
       setQuery(e.target.value);  
   }
   const onDeleteWatched = (id) => {
-    setWatched(watched.filter((item)=> item.imdbID != id))
+    setWatched((watched) => watched.filter((item)=> item.imdbID != id));    
+    toast.success('Movie removed.')
   }
   const onSelect = (id) => {
-    const isInWatched = watched.filter(movie => movie.imdbID === id).length > 0;
-    isInWatched ? setSelected(watched.filter(item => item.imdbID === id)[0]) : 
-                  setSelected(movies.filter(item => item.imdbID === id)[0]);
+    setSelected((selected) => (id = selected ? null : id));
   }
   const onBack = () => {
-    setSelected(false);
+    setSelected(null);
   }
+  useEffect(()=>{
+    localStorage.setItem('watched',JSON.stringify(watched));
+  },[watched])
   useEffect(()=>{
     const getData = async () =>{
       if(query.length < 3) return;
@@ -58,11 +62,10 @@ function App() {
   },[query]);
 
   const handleOnAdd = (watchedMovie) => {
-    const isInWatched = watched.filter(movie => movie.imdbID === watchedMovie.imdbID).length > 0;
-    if(!isInWatched) setWatched((prevState)=>[...prevState,watchedMovie]);
+    setWatched((watched)=>[...watched,watchedMovie]);
     onBack();
+    toast.success('Movie added.')
   }
-
 
   return (
     <>
@@ -77,7 +80,7 @@ function App() {
       <Box>
         {selected ?
           (
-            <Selected key={selected.imdbID} selected={selected} onBack={onBack} onAdd={handleOnAdd}/>
+            <Selected key={selected} selected={selected} onBack={onBack} onAdd={handleOnAdd} watched={watched}/>
           )
           :
           (        
@@ -88,7 +91,9 @@ function App() {
           )}        
       </Box>
      </Main>
+     <ToastContainer/>
     </>
+    
   )
 }
 

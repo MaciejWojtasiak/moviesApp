@@ -10,15 +10,20 @@ const ratingStyle = {
   textAlign:'center',
 }
 
-function Selected({selected, onBack, onAdd}) {
+function Selected({selected, onBack, onAdd, watched}) {
   const [isLoading, setIsLoading] = useState(false);
   const [detailedSelected, setDeatailedSelected] = useState({});
+
+  const isWatched = watched.map(movie => movie.imdbID).includes(selected);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID === selected
+  )?.userRating;
 
   useEffect(()=>{    
     const getSelected = async () => {
       setIsLoading(true);
         try {
-          const res = await axios.get(`http://www.omdbapi.com/?apikey=${KEY}&i=${selected.imdbID}`);
+          const res = await axios.get(`http://www.omdbapi.com/?apikey=${KEY}&i=${selected}`);
           setDeatailedSelected(res.data)
         } catch(err) {
           console.log(err);
@@ -26,7 +31,7 @@ function Selected({selected, onBack, onAdd}) {
           setIsLoading(false);
         }
     }
-    selected.userRating ? setDeatailedSelected(selected) : getSelected();    
+    getSelected()
   },[selected]);
 
   const handleAddSelected = (userRating) =>{    
@@ -51,12 +56,30 @@ function Selected({selected, onBack, onAdd}) {
             </div>
         </header>
         <section>
-        {selected.userRating && <div className="rating"><p style={ratingStyle}>User rated this movie {selected.userRating}</p></div>}
-        {!selected.userRating && <StarRating handleAddSelected={handleAddSelected} />}        
-        <p><em>{detailedSelected.Plot}</em></p>
-        <p>Starring {detailedSelected.Actors}</p>
-        <p>Directed by {detailedSelected.Director}</p>
-        </section>
+            <div className="rating">
+              {!isWatched ? (
+                <>
+                  <StarRating
+                  handleAddSelected={handleAddSelected}                  
+                  />
+                  {detailedSelected.userRating > 0 && (
+                    <button className="btn-add" onClick={onAdd}>
+                      + Add to list
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>
+                  You rated with movie {watchedUserRating} <span>⭐️</span>
+                </p>
+              )}
+            </div>
+            <p>
+              <em>{detailedSelected.Plot}</em>
+            </p>
+            <p>Starring {detailedSelected.Actors}</p>
+            <p>Directed by {detailedSelected.Director}</p>
+          </section>
       </div>
     )}   
   </>

@@ -1,7 +1,7 @@
 function Logo() {
   return (
     <div className='logo'>
-        <span>My</span>
+        <span>MY</span>
         <h1>Movies</h1>
     </div>
   )
