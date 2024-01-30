@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
@@ -14,8 +14,7 @@ import Loader from './components/Loader/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const KEY = import.meta.env.VITE_KEY;
-
+const KEY = '5350fbdf';
 
 function App() { 
   const [movies, setMovies] = useState([]);
@@ -34,9 +33,10 @@ function App() {
   const onSelect = (id) => {
     setSelected((selected) => (id = selected ? null : id));
   }
-  const onBack = () => {
+  const onBack = useCallback(() => {
     setSelected(null);
-  }
+  },[])
+  
   useEffect(()=>{
     localStorage.setItem('watched',JSON.stringify(watched));
   },[watched])
@@ -66,6 +66,17 @@ function App() {
     onBack();
     toast.success('Movie added.')
   }
+  useEffect(()=>{
+      function callback(e) {
+        if(e.code === "Escape") {
+          onBack();
+        }
+      }
+      document.addEventListener('keydown', callback);
+      return function() {
+        document.removeEventListener("keydown", callback);
+      };
+  }, [onBack])
 
   return (
     <>
