@@ -23,7 +23,7 @@ function Selected({selected, onBack, onAdd, watched}) {
     const getSelected = async () => {
       setIsLoading(true);
         try {
-          const res = await axios.get(`http://www.omdbapi.com/?apikey=${KEY}&i=${selected}`);
+          const res = await axios.get(`https://www.omdbapi.com/?apikey=${KEY}&i=${selected}`);
           setDeatailedSelected(res.data)
         } catch(err) {
           console.log(err);
