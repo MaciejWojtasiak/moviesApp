@@ -14,7 +14,7 @@ import Loader from './components/Loader/Loader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const KEY = '5350fbdf';
+const KEY = import.meta.env.VITE_KEY;
 
 function App() { 
   const [movies, setMovies] = useState([]);
@@ -45,7 +45,7 @@ function App() {
       if(query.length < 3) return;
       setIsLoading(true);
       try {        
-        const response = await axios.get(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
+        const response = await axios.get(`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
         if(response.data.Response === 'False') throw new Error('Movie not found.');
         setMovies(response.data.Search);       
       } catch(err) {
