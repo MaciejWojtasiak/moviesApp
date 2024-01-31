@@ -60,6 +60,7 @@ function App() {
     }
     getData();        
   },[query]);
+  
 
   const handleOnAdd = (watchedMovie) => {
     setWatched((watched)=>[...watched,watchedMovie]);

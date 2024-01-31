@@ -55,8 +55,7 @@ function Selected({selected, onBack, onAdd, watched}) {
                 <p>{detailedSelected.imdbRating} IMDb rating</p>
             </div>
         </header>
-        <section>
-            <div className="rating">
+        <section>           
               {!isWatched ? (
                 <>
                   <StarRating
@@ -72,8 +71,7 @@ function Selected({selected, onBack, onAdd, watched}) {
                 <p>
                   You rated with movie {watchedUserRating} <span>⭐️</span>
                 </p>
-              )}
-            </div>
+              )}            
             <p>
               <em>{detailedSelected.Plot}</em>
             </p>
